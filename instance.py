@@ -202,31 +202,31 @@ if __name__ == '__main__':
 
     X_train = layers.Lambda(lambda X_train: K.expand_dims(X_train, axis=-1))(X_train)  # 增加维度
 
-    print('***********************查看训练集的形状**************************')
+ 
     print(X_train.shape)  # 查看训练集的形状
 
     X_test = layers.Lambda(lambda X_test: K.expand_dims(X_test, axis=-1))(X_test)  # 增加维度
-    print('***********************查看测试集的形状**************************')
+  
     print(X_test.shape)  # 查看测试集的形状
 
-    print('----------------2. 初始化参数------------')
+ 
     SearchAgents_no = 20  # 灰狼个数
     T = 2  # 最大迭代次数
     dim = 2  # 维度 需要优化两个变量 - units and epochs
     lb = 1  # 最小值限制
     ub = 10  # 最大值限制
 
-    print('----------------3.调用灰狼算法函数-----------------')
+
     best_units, best_epochs, iterations, accuracy = sanitized_gwo(X_train, X_test, y_train, y_test, SearchAgents_no, T,
                                                                   dim,
                                                                   lb, ub)
 
-    print('----------------4. 最优结果展示-----------------')
+
     print("The best units is " + str(int(abs(best_units)) * 10))  # 输出数据
     print("The best epochs is " + str(int(abs(best_epochs)) * 10))  # 输出数据
 
-    print('----------------5. 应用优化后的最优参数值构建卷积神经网络分类模型-----------------')
-    # 应用优化后的最优参数值构建卷积神经网络分类模型
+
+
     cnn_model = Sequential()  # 序贯模型
     cnn_model.add(Conv1D(filters=5, kernel_size=(4,), input_shape=(X_train.shape[1], 1),
                          activation='relu'))  # 1维卷积层
@@ -239,7 +239,7 @@ if __name__ == '__main__':
                       metrics=['acc'])  # 编译
     history = cnn_model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=int(abs(best_epochs)) * 10,
                             batch_size=64)  # 拟合
-    print('*************************输出模型摘要信息*******************************')
+ 
     print(cnn_model.summary())  # 输出模型摘要信息
 
     plot_model(cnn_model, to_file='model.png', show_shapes=True)  # 保存模型结构信息
@@ -275,9 +275,7 @@ if __name__ == '__main__':
     y_pred = cnn_model.predict(X_test, batch_size=10)  # 预测
     y_pred = np.round(y_pred)  # 转化为类别
 
-    print('----------------模型评估-----------------')
-    # 模型评估
-    print('**************************输出测试集的模型评估指标结果*******************************')
+   
 
     print('卷积神经网络分类模型-最优参数-准确率分值: {0:0.4f}'.format(accuracy_score(y_test, y_pred)))
     print("卷积神经网络分类模型-最优参数-查准率 :", round(precision_score(y_test, y_pred), 4))
