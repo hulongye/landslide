@@ -3,7 +3,7 @@ from keras.layers import Conv1D, MaxPooling1D, Flatten, Dense, Dropout
 from keras import regularizers
 
 
-def cnn_model():
+def cnn():
     model = Sequential()
     conv1 = Conv1D(filters=15, kernel_size=3, padding='same', activation='tanh', input_shape=(13, 1),
                    kernel_regularizer=regularizers.L1(0.01))

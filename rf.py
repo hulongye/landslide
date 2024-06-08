@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 
 
-data = pd.read_excel('../data/test.xlsx')
+data = pd.read_excel('origin.xlsx')
 data = data.iloc[:, :].astype('float').values
 
 X1 = data[:,0:14]
